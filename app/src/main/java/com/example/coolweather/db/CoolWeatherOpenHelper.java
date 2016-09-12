@@ -33,5 +33,15 @@ public class CoolWeatherOpenHelper extends SQLiteOpenHelper{
         super(context, name, factory ,version);
     }
 
+    @Override
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        sqLiteDatabase.execSQL(CREATE_PROVINCE);
+        sqLiteDatabase.execSQL(CREATE_CITY);
+        sqLiteDatabase.execSQL(CREATE_COUNTY);
+    }
 
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+
+    }
 }
