@@ -42,6 +42,7 @@ public class ChooseAreaActivity extends AppCompatActivity {
     private Province selectedProvince;
     private City selectedCity;
     private int currentLevel;
+    private String provinceCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +91,7 @@ public class ChooseAreaActivity extends AppCompatActivity {
                 dataList.add(city.getCityName());
             adapter.notifyDataSetChanged();
             listView.setSelection(0);
+            provinceCode = selectedProvince.getProvinceCode();
             titleText.setText(selectedProvince.getProvinceName());
             currentLevel = LEVEL_CITY;
         }else{
@@ -115,11 +117,14 @@ public class ChooseAreaActivity extends AppCompatActivity {
 
     private void queryFromServer(final String code, final String type){
         String address;
-        if(!TextUtils.isEmpty(code)){
-            address = "http://www.weather.com.cn/data/cityinfo/" + code
+        if(!TextUtils.isEmpty(code) && type.equals("city")){
+            address = "http://www.weather.com.cn/data/city3jdata/provshi/" + code
                     + ".html";
+        }else if(!TextUtils.isEmpty(code) && type.equals("county")) {
+            address = "http://www.weather.com.cn/data/city3jdata/station/"
+                     + provinceCode + code + ".html";
         }else{
-            address = "http://www.weather.com.cn/data/list3/city.xml";
+            address = "http://www.weather.com.cn/data/city3jdata/china.html";
         }
         showProgressDialog();
         HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {

@@ -39,6 +39,6 @@ public class HttpUtil {
                         connection.disconnect();
                 }
             }
-        });
+        }).start();
     }
 }
