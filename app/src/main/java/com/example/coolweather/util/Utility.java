@@ -1,5 +1,9 @@
 package com.example.coolweather.util;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -9,10 +13,14 @@ import com.example.coolweather.model.County;
 import com.example.coolweather.model.Province;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by yang on 2016/9/12.
@@ -85,5 +93,37 @@ public class Utility {
             }
         }
         return false;
+    }
+
+    public static void handleWeatherResponse(Context context, String response){
+        try {
+            JSONObject json = new JSONObject(response);
+            JSONObject weatherInfo = json.getJSONObject("weatherinfo");
+            String cityName = weatherInfo.getString("city");
+            String cityCode = weatherInfo.getString("cityid");
+            String temp1 = weatherInfo.getString("temp1");
+            String temp2 = weatherInfo.getString("temp2");
+            String weather = weatherInfo.getString("weather");
+            String publishTime = weatherInfo.getString("ptime");
+            saveWeatherInfo(context, cityName, cityCode, temp1, temp2, weather, publishTime);
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void saveWeatherInfo(Context context, String cityName, String cityCode,
+                                       String temp1, String temp2, String weather,
+                                       String publishTime){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年M月d日", Locale.CHINA);
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        editor.putBoolean("city_selected", true);
+        editor.putString("city_name", cityName);
+        editor.putString("city_code", cityCode);
+        editor.putString("temp1", temp1);
+        editor.putString("temp2", temp2);
+        editor.putString("weather", weather);
+        editor.putString("publish_time", publishTime);
+        editor.putString("current_date", sdf.format(new Date()));
+        editor.commit();
     }
 }
