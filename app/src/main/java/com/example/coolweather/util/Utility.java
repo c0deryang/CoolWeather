@@ -105,6 +105,7 @@ public class Utility {
             String temp2 = weatherInfo.getString("temp2");
             String weather = weatherInfo.getString("weather");
             String publishTime = weatherInfo.getString("ptime");
+            Log.d("Utility", cityName + " " + temp1 + " " + temp2 + " " + weather);
             saveWeatherInfo(context, cityName, cityCode, temp1, temp2, weather, publishTime);
         }catch(JSONException e){
             e.printStackTrace();
@@ -124,6 +125,6 @@ public class Utility {
         editor.putString("weather", weather);
         editor.putString("publish_time", publishTime);
         editor.putString("current_date", sdf.format(new Date()));
-        editor.commit();
+        editor.apply();
     }
 }
